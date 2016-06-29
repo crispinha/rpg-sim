@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SCREAMO</title>
+    <style>
+        body {
+            background-color: grey;
+            /*color: white;*/
+            font-size: 150px;
+        }
+        @media not mobile {
+            .three {
+                display: block;
+            }
+            .four {
+                display: none;
+            }
+        }
+
+        @media mobile {
+            .three {
+                display: none;
+            }
+            .four {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="three">DESKTOP</div>
+<div class="four">MOBILE</div>
+</body>
+</html>
