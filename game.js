@@ -13,7 +13,7 @@ var getGridCoords  = function(x, y){
 };
 var loadState = {
 	preload: function () {
-		game.time.advancedTiming = true
+		game.time.advancedTiming = true;
 		game.stage.smoothed = false;
 		game.antialias = false;
 		game.load.tilemap('arena', 'assets/battlemap.json', null, Phaser.Tilemap.TILED_JSON);
