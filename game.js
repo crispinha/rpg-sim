@@ -18,7 +18,7 @@ var loadState = {
 		game.antialias = false;
 		game.load.tilemap('arena', 'assets/battlemap.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('tileset', 'assets/tileset.png');
-		game.load.image('archer', 'assets/archer.png');
+		game.load.image('archer', 'assets/people/archer.png');
 			},
 	create: function () {
 		game.stage.backgroundColor = "#4488AA";
