@@ -6,8 +6,8 @@ var goodGuys = [];
 var scale = 7;
 //takes grid [x, y] returns game [x, y]
 var getGridCoords  = function(x, y){
-	if (x > map.width || y > map.width || x <= 0 || y <= 0) {
-		throw RangeError("x or y is too big or too small" + x + ' ' + y);
+	if (x > map.width || y > map.height || x <= 0 || y <= 0) {
+		throw RangeError("x or y is too big or too small: x: " + x + ', y: ' + y);
 	}
 	return [bg.x + (map.tileWidth * scale * (x - 1)), bg.y + (map.tileHeight * scale * (y - 1))];
 };
@@ -38,6 +38,7 @@ var playState = {
 		});
 
 		cursors = game.input.keyboard.createCursorKeys();
+		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
 		person = game.add.sprite(0, 0, 'archer');
 		person.gridX = 1;
@@ -62,26 +63,25 @@ var playState = {
 
 	},
 	update: function () {
-		// fps.setText(game.time.fps + " FPS");
+		fps.setText(game.time.fps + " FPS");
 		if (cursors.up.isDown){
-			if (!person.gridY - 1 > map.width || !person.gridY - 1 <= 0) {
-			person.gridY--; }
+			if (person.gridY - 1 > 0) {
+				person.gridY--; }
 			cursors.up.reset();
 		}
 		if (cursors.down.isDown){
-			if (!person.gridY + 1 > map.width || !person.gridY + 1 <= 0) {
-			person.gridY++; }
+			if (person.gridY + 1 <= map.height) {
+				person.gridY++; }
 			cursors.down.reset();
 		}
 		if (cursors.left.isDown){
-			if (!person.gridX - 1 > map.width || !person.gridX - 1 <= 0) {
-				person.gridX--;
-			}
+			if (person.gridX - 1 > 0) {
+				person.gridX--; }
 			cursors.left.reset();
 		}
 		if (cursors.right.isDown) {
-			if (!person.gridX + 1 > map.width || !person.gridX + 1 <= 0) {
-			person.gridX++; }
+			if (person.gridX + 1 <= map.width) {
+				person.gridX++; }
 			cursors.right.reset();
 		}
 		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
