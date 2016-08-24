@@ -82,7 +82,7 @@ var playState = {
 		fg.x = this.world.centerX - (map.widthInPixels * scale / 2);
 		fg.y = this.world.centerY - (map.heightInPixels * scale / 2);
 
-		//sprite setu[
+		//sprite setup
 		sprites = find('p_', game.cache.getKeys(Phaser.Cache.IMAGE));
 		people = [];
 
@@ -96,7 +96,7 @@ var playState = {
 		//making people
 		for (var i = 0; i < 2; i++) {
 			console.log(i);
-			people[i] = game.add.sprite(0, 0, "p_archer");
+			people[i] = game.add.sprite(0, 0, sprites[Math.floor(Math.random() * sprites.length)]);
 			people[i].scale = {x: scale, y: scale};
 			people[i].gridX = getRandomIntInclusive(1, map.width);
 			people[i].gridY = getRandomIntInclusive(1, map.height);
