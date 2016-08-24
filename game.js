@@ -77,7 +77,7 @@ var playState = {
 		map.addTilesetImage('Toen', 'tileset');
 		bg = map.createLayer('Background');
 		fg = map.createLayer('Foreground');
-		
+
 		//initial tilemap setup
 		bg.scale = {x:scale, y:scale};
 		fg.scale = {x:scale, y:scale};
@@ -122,22 +122,22 @@ var playState = {
 	update: function () {
 		fps.setText(game.time.fps + " FPS");
 		if (cursors.up.isDown){
-			if (isLocationInRange(person.gridX, person.gridY - 1)) {
+			if (isLocationInRange(person.gridX, person.gridY - 1) && isLocationAccessable(person.gridX, person.gridY - 1)) {
 				person.gridY--; }
 			cursors.up.reset();
 		}
 		if (cursors.down.isDown){
-			if (isLocationInRange(person.gridX, person.gridY + 1)) {
+			if (isLocationInRange(person.gridX, person.gridY + 1) && isLocationAccessable(person.gridX, person.gridY + 1)) {
 				person.gridY++; }
 			cursors.down.reset();
 		}
 		if (cursors.left.isDown){
-			if (isLocationInRange(person.gridX - 1, person.gridY)) {
+			if (isLocationInRange(person.gridX - 1, person.gridY) && isLocationAccessable(person.gridX - 1, person.gridY)) {
 				person.gridX--; }
 			cursors.left.reset();
 		}
 		if (cursors.right.isDown) {
-			if (isLocationInRange(person.gridX + 1, person.gridY)) {
+			if (isLocationInRange(person.gridX + 1, person.gridY) && isLocationAccessable(person.gridX + 1, person.gridY)) {
 				person.gridX++; }
 			cursors.right.reset();
 		}
