@@ -41,6 +41,14 @@ var isLocationInRange = function(x, y){
 	}
 };
 
+var isLocationAccessable = function (x, y) {
+	if (map.getTile(x - 1, y - 1, "Foreground") == null && isLocationInRange(x, y)) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
 var loadState = {
 	preload: function () {
 		game.time.advancedTiming = true;
@@ -69,7 +77,7 @@ var playState = {
 		map.addTilesetImage('Toen', 'tileset');
 		bg = map.createLayer('Background');
 		fg = map.createLayer('Foreground');
-
+		
 		//initial tilemap setup
 		bg.scale = {x:scale, y:scale};
 		fg.scale = {x:scale, y:scale};
@@ -95,12 +103,10 @@ var playState = {
 
 		//making people
 		for (var i = 0; i < 2; i++) {
-			console.log(i);
 			people[i] = game.add.sprite(0, 0, sprites[Math.floor(Math.random() * sprites.length)]);
 			people[i].scale = {x: scale, y: scale};
 			people[i].gridX = getRandomIntInclusive(1, map.width);
 			people[i].gridY = getRandomIntInclusive(1, map.height);
-			console.log('X: ' + String(people[i].gridX), ', Y: ' + String(people[i].gridY));
 			[people[i].x, people[i].y] = getGridCoords(people[i].gridX, people[i].gridY);
 		}
 
