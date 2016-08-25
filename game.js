@@ -105,8 +105,11 @@ var playState = {
 		for (var i = 0; i < 2; i++) {
 			people[i] = game.add.sprite(0, 0, sprites[Math.floor(Math.random() * sprites.length)]);
 			people[i].scale = {x: scale, y: scale};
-			people[i].gridX = getRandomIntInclusive(1, map.width);
-			people[i].gridY = getRandomIntInclusive(1, map.height);
+			do {
+				people[i].gridX = getRandomIntInclusive(1, map.width);
+				people[i].gridY = getRandomIntInclusive(1, map.height);
+			} while (!isLocationAccessable(people[i].gridX, people[i].gridY));
+
 			[people[i].x, people[i].y] = getGridCoords(people[i].gridX, people[i].gridY);
 		}
 
@@ -141,7 +144,6 @@ var playState = {
 				person.gridX++; }
 			cursors.right.reset();
 		}
-
 
 		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
 	}
