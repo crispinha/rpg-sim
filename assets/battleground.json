@@ -1,7 +1,7 @@
 { "height":6,
  "layers":[
         {
-         "data":[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
          "height":6,
          "name":"Background",
          "opacity":1,
@@ -12,7 +12,7 @@
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "data":[0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":6,
          "name":"Foreground",
          "opacity":1,
@@ -28,15 +28,15 @@
  "tileheight":16,
  "tilesets":[
         {
-         "columns":7,
+         "columns":2,
          "firstgid":1,
-         "image":"tilesets\/Toen.png",
-         "imageheight":832,
-         "imagewidth":112,
+         "image":"art-out\/spritesheet.png",
+         "imageheight":33,
+         "imagewidth":33,
          "margin":0,
-         "name":"Toen",
-         "spacing":0,
-         "tilecount":364,
+         "name":"spritesheet",
+         "spacing":1,
+         "tilecount":4,
          "tileheight":16,
          "tilewidth":16
         }],

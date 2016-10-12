@@ -20,12 +20,10 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
 var game = new Phaser.Game(800, 800, Phaser.AUTO, 'div');
-var goodGuys = [];
 var scale = 7;
-//takes grid [x, y] returns game [x, y]
 
+//takes grid [x, y] returns game [x, y]
 var getGridCoords = function(x, y){
 	if (x > map.width || y > map.height || x <= 0 || y <= 0) {
 		throw RangeError("x or y is too big or too small: x: " + x + ', y: ' + y);
@@ -33,7 +31,7 @@ var getGridCoords = function(x, y){
 	return [bg.x + (map.tileWidth * scale * (x - 1)), bg.y + (map.tileHeight * scale * (y - 1))];
 };
 
-var isLocationInRange = function(x, y){
+var isLocationInRange = function (x, y){
 	if (x > 0 && x <= map.height && y > 0 && y <= map.height) {
 		return true;
 	} else {
@@ -49,13 +47,23 @@ var isLocationAccessable = function (x, y) {
 	}
 };
 
+var isLocationOccupied = function (x, y) {
+	for (var i = 0; i < sprites.children.length; i++) {
+		if (x == sprites.children[i].gridX && y == sprites.children[i].gridY) {
+			return true
+		}
+	}
+	return false;
+};
+
 var loadState = {
 	preload: function () {
 		game.time.advancedTiming = true;
 		game.stage.smoothed = false;
 		game.antialias = false;
-		game.load.tilemap('arena', 'assets/battlemap.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.image('tileset', 'assets/tileset.png');
+		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.image('tileset', 'assets/spritesheet.png');
 
 		game.load.image('p_archer', 'assets/people/archer.png');
 		game.load.image('p_chainmail-knight', 'assets/people/chainmail-knight.png');
@@ -74,7 +82,7 @@ var playState = {
 	create: function () {
 		//map setup
 		map = game.add.tilemap('arena');
-		map.addTilesetImage('Toen', 'tileset');
+		map.addTilesetImage('spritesheet', 'tileset');
 		bg = map.createLayer('Background');
 		fg = map.createLayer('Foreground');
 
@@ -91,26 +99,28 @@ var playState = {
 		fg.y = this.world.centerY - (map.heightInPixels * scale / 2);
 
 		//sprite setup
-		sprites = find('p_', game.cache.getKeys(Phaser.Cache.IMAGE));
-		people = [];
+		sprites = game.add.group()
+		friendly_sprites = find('p_', game.cache.getKeys(Phaser.Cache.IMAGE));
+		friendly_people = [];
 
 		person = game.add.sprite(0, 0, 'p_peasant');
+		sprites.add(person);
 		person.gridX = 1;
 		person.gridY = 1;
 		person.inputEnabled = true;
 		person.scale = {x: scale, y: scale};
 		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
 
-		//making people
+		//making friendly_people
 		for (var i = 0; i < 2; i++) {
-			people[i] = game.add.sprite(0, 0, sprites[Math.floor(Math.random() * sprites.length)]);
-			people[i].scale = {x: scale, y: scale};
+			friendly_people[i] = game.add.sprite(0, 0, friendly_sprites[Math.floor(Math.random() * friendly_sprites.length)]);
+			friendly_people[i].scale = {x: scale, y: scale};
 			do {
-				people[i].gridX = getRandomIntInclusive(1, map.width);
-				people[i].gridY = getRandomIntInclusive(1, map.height);
-			} while (!isLocationAccessable(people[i].gridX, people[i].gridY));
-
-			[people[i].x, people[i].y] = getGridCoords(people[i].gridX, people[i].gridY);
+				friendly_people[i].gridX = getRandomIntInclusive(1, map.width);
+				friendly_people[i].gridY = getRandomIntInclusive(1, map.height);
+			} while (!isLocationAccessable(friendly_people[i].gridX, friendly_people[i].gridY));
+			sprites.add(friendly_people[i]);
+			[friendly_people[i].x, friendly_people[i].y] = getGridCoords(friendly_people[i].gridX, friendly_people[i].gridY);
 		}
 
 		//control and debug setup
@@ -143,6 +153,11 @@ var playState = {
 			if (isLocationInRange(person.gridX + 1, person.gridY) && isLocationAccessable(person.gridX + 1, person.gridY)) {
 				person.gridX++; }
 			cursors.right.reset();
+		}
+
+		if (space.isDown) {
+				console.log(isLocationOccupied(person.gridX, person.gridY));
+			space.reset();
 		}
 
 		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
