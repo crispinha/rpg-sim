@@ -71,6 +71,8 @@ var loadState = {
 		game.load.image('p_knight', 'assets/people/knight.png');
 		game.load.image('p_lady-peasant', 'assets/people/lady-peasant.png');
 		game.load.image('p_peasant', 'assets/people/peasant.png');
+
+		game.load.image('target', 'assets/target.png');
 			},
 	create: function () {
 		game.stage.backgroundColor = "#4488AA";
@@ -99,17 +101,19 @@ var playState = {
 		fg.y = this.world.centerY - (map.heightInPixels * scale / 2);
 
 		//sprite setup
-		sprites = game.add.group()
+		sprites = game.add.group();
+		ui_elements = game.add.group();
 		friendly_sprites = find('p_', game.cache.getKeys(Phaser.Cache.IMAGE));
 		friendly_people = [];
 
-		person = game.add.sprite(0, 0, 'p_peasant');
-		sprites.add(person);
-		person.gridX = 1;
-		person.gridY = 1;
-		person.inputEnabled = true;
-		person.scale = {x: scale, y: scale};
-		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
+		target = game.add.sprite(0, 0, 'target');
+		sprites.add(target);
+		ui_elements.add(target);
+		target.gridX = 1;
+		target.gridY = 1;
+		target.inputEnabled = true;
+		target.scale = {x: scale, y: scale};
+		[target.x,target.y] = getGridCoords(target.gridX, target.gridY);
 
 		//making friendly_people
 		for (var i = 0; i < 2; i++) {
@@ -128,6 +132,8 @@ var playState = {
 			font: "12px Arial"
 		});
 
+		game.world.bringToTop(ui_elements);
+
 		cursors = game.input.keyboard.createCursorKeys();
 		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
@@ -135,36 +141,32 @@ var playState = {
 	update: function () {
 		fps.setText(game.time.fps + " FPS");
 		if (cursors.up.isDown){
-			if (isLocationInRange(person.gridX, person.gridY - 1) && isLocationAccessable(person.gridX, person.gridY - 1)
-				&& !isLocationOccupied(person.gridX, person.gridY - 1)) {
-				person.gridY--; }
+			if (isLocationInRange(target.gridX, target.gridY - 1) && isLocationAccessable(target.gridX, target.gridY - 1)) {
+				target.gridY--; }
 			cursors.up.reset();
 		}
 		if (cursors.down.isDown){
-			if (isLocationInRange(person.gridX, person.gridY + 1) && isLocationAccessable(person.gridX, person.gridY + 1)
-				&& !isLocationOccupied(person.gridX, person.gridY + 1)) {
-				person.gridY++; }
+			if (isLocationInRange(target.gridX, target.gridY + 1) && isLocationAccessable(target.gridX, target.gridY + 1)) {
+				target.gridY++; }
 			cursors.down.reset();
 		}
 		if (cursors.left.isDown){
-			if (isLocationInRange(person.gridX - 1, person.gridY) && isLocationAccessable(person.gridX - 1, person.gridY)
-			&& !isLocationOccupied(person.gridX - 1, person.gridY)) {
-				person.gridX--; }
+			if (isLocationInRange(target.gridX - 1, target.gridY) && isLocationAccessable(target.gridX - 1, target.gridY)) {
+				target.gridX--; }
 			cursors.left.reset();
 		}
 		if (cursors.right.isDown) {
-			if (isLocationInRange(person.gridX + 1, person.gridY) && isLocationAccessable(person.gridX + 1, person.gridY)
-			&& !isLocationOccupied(person.gridX + 1, person.gridY)) {
-				person.gridX++; }
+			if (isLocationInRange(target.gridX + 1, target.gridY) && isLocationAccessable(target.gridX + 1, target.gridY)) {
+				target.gridX++; }
 			cursors.right.reset();
 		}
 
 		if (space.isDown) {
-				console.log(isLocationOccupied(person.gridX, person.gridY));
+				console.log(isLocationOccupied(target.gridX, target.gridY));
 			space.reset();
 		}
 
-		[person.x,person.y] = getGridCoords(person.gridX, person.gridY);
+		[target.x,target.y] = getGridCoords(target.gridX, target.gridY);
 	}
 
 };
