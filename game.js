@@ -24,11 +24,17 @@ var game = new Phaser.Game(800, 800, Phaser.AUTO, 'div');
 var scale = 7;
 
 //takes grid [x, y] returns game [x, y]
-var getGridCoords = function(x, y){
+var getRealCoords = function(x, y){
 	if (x > map.width || y > map.height || x <= 0 || y <= 0) {
 		throw RangeError("x or y is too big or too small: x: " + x + ', y: ' + y);
 	}
 	return [bg.x + (map.tileWidth * scale * (x - 1)), bg.y + (map.tileHeight * scale * (y - 1))];
+};
+
+//takes game [x,y] returns grid [x,y]
+//hopefully
+var getGridCoords = function (x, y) {
+	return [Math.round(bg.getTileX(x) / scale), Math.round(bg.getTileY(y) / scale)];
 };
 
 var isLocationInRange = function (x, y){
@@ -63,7 +69,7 @@ var loadState = {
 		game.antialias = false;
 		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.image('tileset', 'assets/spritesheet.png');
+		game.load.image('tileset', 'assets/test_spritesheet.png');
 
 		game.load.image('p_archer', 'assets/people/archer.png');
 		game.load.image('p_chainmail-knight', 'assets/people/chainmail-knight.png');
@@ -74,6 +80,7 @@ var loadState = {
 
 		game.load.image('target', 'assets/target.png');
 			},
+
 	create: function () {
 		game.stage.backgroundColor = "#4488AA";
 		game.state.start('play');
@@ -82,9 +89,13 @@ var loadState = {
 
 var playState = {
 	create: function () {
+		point = new Phaser.Point();
+
 		//map setup
 		map = game.add.tilemap('arena');
 		map.addTilesetImage('spritesheet', 'tileset');
+		map.x = this.world.centerX - (map.widthInPixels * scale / 2);
+		map.y = this.world.centerY - (map.heightInPixels * scale / 2);
 		bg = map.createLayer('Background');
 		fg = map.createLayer('Foreground');
 
@@ -113,7 +124,7 @@ var playState = {
 		target.gridY = 1;
 		target.inputEnabled = true;
 		target.scale = {x: scale, y: scale};
-		[target.x,target.y] = getGridCoords(target.gridX, target.gridY);
+		[target.x,target.y] = getRealCoords(target.gridX, target.gridY);
 
 		//making friendly_people
 		for (var i = 0; i < 2; i++) {
@@ -124,7 +135,8 @@ var playState = {
 				friendly_people[i].gridY = getRandomIntInclusive(1, map.height);
 			} while (!isLocationAccessable(friendly_people[i].gridX, friendly_people[i].gridY));
 			sprites.add(friendly_people[i]);
-			[friendly_people[i].x, friendly_people[i].y] = getGridCoords(friendly_people[i].gridX, friendly_people[i].gridY);
+			[friendly_people[i].x, friendly_people[i].y] = getRealCoords(friendly_people[i].gridX, friendly_people[i].gridY);
+			friendly_people[i].inputEnabled = true;
 		}
 
 		//control and debug setup
@@ -137,6 +149,15 @@ var playState = {
 		cursors = game.input.keyboard.createCursorKeys();
 		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
+		//movement stuff
+		for (var i = 0; i < friendly_people.length; i++) {
+			friendly_people[i].events.onInputDown.add(function () {
+				game.input.onDown.addOnce(function () {
+					[this.gridX, this.gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+					[this.x,this.y] = getRealCoords(this.gridX, this.gridY);
+				}, this);
+			}, this)
+		}
 	},
 	update: function () {
 		fps.setText(game.time.fps + " FPS");
@@ -166,7 +187,7 @@ var playState = {
 			space.reset();
 		}
 
-		[target.x,target.y] = getGridCoords(target.gridX, target.gridY);
+		[target.x,target.y] = getRealCoords(target.gridX, target.gridY);
 	}
 
 };
