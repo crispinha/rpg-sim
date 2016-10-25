@@ -150,13 +150,14 @@ var playState = {
 		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
 
 		//movement stuff
+		//aaa
 		for (var i = 0; i < friendly_people.length; i++) {
 			friendly_people[i].events.onInputDown.add(function () {
 				game.input.onDown.addOnce(function () {
-					[this.gridX, this.gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
-					[this.x,this.y] = getRealCoords(this.gridX, this.gridY);
+					[friendly_people[this.index], friendly_people[this.index]] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+					[friendly_people[this.index], friendly_people[this.index]] = getRealCoords(friendly_people[this.index], friendly_people[this.index]);
 				}, this);
-			}, this)
+			}, {index: i})
 		}
 	},
 	update: function () {
