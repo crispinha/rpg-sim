@@ -20,8 +20,9 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var game = new Phaser.Game(800, 800, Phaser.AUTO, 'div');
 var scale = 7;
+var game = new Phaser.Game((scale + 1) * 100, (scale + 1) * 100, Phaser.AUTO, 'div');
+
 
 //takes grid [x, y] returns game [x, y]
 var getRealCoords = function(x, y){
@@ -68,6 +69,11 @@ var loadState = {
 		game.stage.smoothed = false;
 		game.antialias = false;
 		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		// //  This sets a limit on the up-scale
+		// game.scale.maxWidth = 800;
+		// game.scale.maxHeight = 800;
+		// game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+		// game.scale.setGameSi();
 		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('tileset', 'assets/spritesheet.png');
 
