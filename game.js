@@ -157,7 +157,8 @@ var playState = {
 					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
 					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
 					//long line mofo
-					if (isLocationInRange(pointer_grid_x, pointer_grid_y) && isLocationAccessable(pointer_grid_x, pointer_grid_y) && !isLocationOccupied(pointer_grid_x, pointer_grid_y)) {
+					if (isLocationInRange(pointer_grid_x, pointer_grid_y) && isLocationAccessable(pointer_grid_x, pointer_grid_y)
+						&& !isLocationOccupied(pointer_grid_x, pointer_grid_y)) {
 						[friendly_people[this.index].gridX, friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
 						[friendly_people[this.index].x, friendly_people[this.index].y] = getRealCoords(friendly_people[this.index].gridX, friendly_people[this.index].gridY);
 					}
