@@ -69,7 +69,7 @@ var loadState = {
 		game.antialias = false;
 		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.image('tileset', 'assets/test_spritesheet.png');
+		game.load.image('tileset', 'assets/spritesheet.png');
 
 		game.load.image('p_archer', 'assets/people/archer.png');
 		game.load.image('p_chainmail-knight', 'assets/people/chainmail-knight.png');
@@ -154,8 +154,13 @@ var playState = {
 			friendly_people[i].events.onInputDown.add(function () {
 				//index stuff is a horrible hack (probably) but it works
 				game.input.onDown.addOnce(function () {
-					[friendly_people[this.index].gridX, friendly_people[this.index].gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
-					[friendly_people[this.index].x, friendly_people[this.index].y] = getRealCoords(friendly_people[this.index].gridX, friendly_people[this.index].gridY);
+					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
+					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+					//long line mofo
+					if (isLocationInRange(pointer_grid_x, pointer_grid_y) && isLocationAccessable(pointer_grid_x, pointer_grid_y) && !isLocationOccupied(pointer_grid_x, pointer_grid_y)) {
+						[friendly_people[this.index].gridX, friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
+						[friendly_people[this.index].x, friendly_people[this.index].y] = getRealCoords(friendly_people[this.index].gridX, friendly_people[this.index].gridY);
+					}
 				}, this);
 			}, {index: i})
 		}
