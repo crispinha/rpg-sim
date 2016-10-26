@@ -85,6 +85,8 @@ var loadState = {
 		game.load.image('p_peasant', 'assets/people/peasant.png');
 
 		game.load.image('target', 'assets/target.png');
+		game.load.image('trans-red', 'assets/trans-red.png');
+		game.load.image('trans-blue', 'assets/trans-blue.png')
 			},
 
 	create: function () {
@@ -128,7 +130,6 @@ var playState = {
 		ui_elements.add(target);
 		target.gridX = 1;
 		target.gridY = 1;
-		target.inputEnabled = true;
 		target.scale = {x: scale, y: scale};
 		[target.x,target.y] = getRealCoords(target.gridX, target.gridY);
 
@@ -154,11 +155,14 @@ var playState = {
 
 		cursors = game.input.keyboard.createCursorKeys();
 		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+		key_x = game.input.keyboard.addKey(Phaser.KeyCode.X);
+		key_z = game.input.keyboard.addKey(Phaser.KeyCode.Z);
 
 		//movement stuff
 		for (var i = 0; i < friendly_people.length; i++) {
 			friendly_people[i].events.onInputDown.add(function () {
 				//index stuff is a horrible hack (probably) but it works
+				target.loadTexture('trans-blue');
 				game.input.onDown.addOnce(function () {
 					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
 					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
@@ -168,6 +172,7 @@ var playState = {
 						[friendly_people[this.index].gridX, friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
 						[friendly_people[this.index].x, friendly_people[this.index].y] = getRealCoords(friendly_people[this.index].gridX, friendly_people[this.index].gridY);
 					}
+					target.loadTexture('target');
 				}, this);
 			}, {index: i})
 		}
@@ -196,11 +201,24 @@ var playState = {
 		}
 
 		if (space.isDown) {
-				console.log(isLocationOccupied(target.gridX, target.gridY));
+			console.log([game.input.activePointer.x, game.input.activePointer.y])
 			space.reset();
 		}
 
-		[target.x,target.y] = getRealCoords(target.gridX, target.gridY);
+		if (key_x.isDown) {
+			target.loadTexture('trans-blue');
+			key_x.reset();
+		}
+		if (key_z.isDown) {
+			target.loadTexture('trans-red');
+			key_z.reset();
+		}
+
+		[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y)
+		if (isLocationInRange(pointer_grid_x, pointer_grid_y)) {
+			[target.gridX, target.gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+			[target.x, target.y] = getRealCoords(target.gridX, target.gridY);
+		}
 	}
 
 };
