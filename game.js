@@ -85,8 +85,9 @@ var loadState = {
 		game.load.image('p_peasant', 'assets/people/peasant.png');
 
 		game.load.image('target', 'assets/target.png');
+		game.load.image('trans-grey', 'assets/trans-grey.png');
+		game.load.image('trans-blue', 'assets/trans-blue.png');
 		game.load.image('trans-red', 'assets/trans-red.png');
-		game.load.image('trans-blue', 'assets/trans-blue.png')
 			},
 
 	create: function () {
@@ -132,6 +133,7 @@ var playState = {
 		target.gridY = 1;
 		target.scale = {x: scale, y: scale};
 		[target.x,target.y] = getRealCoords(target.gridX, target.gridY);
+		target.on = false;
 
 		//making friendly_people
 		for (var i = 0; i < 2; i++) {
@@ -155,14 +157,12 @@ var playState = {
 
 		cursors = game.input.keyboard.createCursorKeys();
 		space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-		key_x = game.input.keyboard.addKey(Phaser.KeyCode.X);
-		key_z = game.input.keyboard.addKey(Phaser.KeyCode.Z);
 
 		//movement stuff
 		for (var i = 0; i < friendly_people.length; i++) {
 			friendly_people[i].events.onInputDown.add(function () {
 				//index stuff is a horrible hack (probably) but it works
-				target.loadTexture('trans-blue');
+				target.on = true;
 				game.input.onDown.addOnce(function () {
 					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
 					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
@@ -171,54 +171,34 @@ var playState = {
 						&& !isLocationOccupied(pointer_grid_x, pointer_grid_y)) {
 						[friendly_people[this.index].gridX, friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
 						[friendly_people[this.index].x, friendly_people[this.index].y] = getRealCoords(friendly_people[this.index].gridX, friendly_people[this.index].gridY);
+						target.on = false;
 					}
-					target.loadTexture('target');
 				}, this);
 			}, {index: i})
 		}
 	},
 	update: function () {
 		fps.setText(game.time.fps + " FPS");
-		if (cursors.up.isDown){
-			if (isLocationInRange(target.gridX, target.gridY - 1) && isLocationAccessable(target.gridX, target.gridY - 1)) {
-				target.gridY--; }
-			cursors.up.reset();
-		}
-		if (cursors.down.isDown){
-			if (isLocationInRange(target.gridX, target.gridY + 1) && isLocationAccessable(target.gridX, target.gridY + 1)) {
-				target.gridY++; }
-			cursors.down.reset();
-		}
-		if (cursors.left.isDown){
-			if (isLocationInRange(target.gridX - 1, target.gridY) && isLocationAccessable(target.gridX - 1, target.gridY)) {
-				target.gridX--; }
-			cursors.left.reset();
-		}
-		if (cursors.right.isDown) {
-			if (isLocationInRange(target.gridX + 1, target.gridY) && isLocationAccessable(target.gridX + 1, target.gridY)) {
-				target.gridX++; }
-			cursors.right.reset();
-		}
 
-		if (space.isDown) {
-			console.log([game.input.activePointer.x, game.input.activePointer.y])
-			space.reset();
-		}
 
-		if (key_x.isDown) {
-			target.loadTexture('trans-blue');
-			key_x.reset();
-		}
-		if (key_z.isDown) {
-			target.loadTexture('trans-red');
-			key_z.reset();
-		}
-
-		[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y)
+		[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
 		if (isLocationInRange(pointer_grid_x, pointer_grid_y)) {
 			[target.gridX, target.gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
 			[target.x, target.y] = getRealCoords(target.gridX, target.gridY);
 		}
+
+		if (space.isDown){
+			console.log(target.on);
+		}
+
+		if (target.on && isLocationOccupied(pointer_grid_x, pointer_grid_y) || target.on && !isLocationAccessable(pointer_grid_x, pointer_grid_y)) {
+			target.loadTexture('trans-grey')
+		} else if (target.on) {
+			target.loadTexture('trans-blue');
+		} else {
+			target.loadTexture('target')
+		}
+
 	}
 
 };
