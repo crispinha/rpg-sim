@@ -77,12 +77,12 @@ var loadState = {
 		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('tileset', 'assets/spritesheet.png');
 
-		game.load.image('p_archer', 'assets/people/archer.png');
-		game.load.image('p_chainmail-knight', 'assets/people/chainmail-knight.png');
-		game.load.image('p_horse-knight', 'assets/people/horse-knight.png');
-		game.load.image('p_knight', 'assets/people/knight.png');
-		game.load.image('p_lady-peasant', 'assets/people/lady-peasant.png');
-		game.load.image('p_peasant', 'assets/people/peasant.png');
+		game.load.image('p_archer', 'assets/friendly-people/archer.png');
+		game.load.image('p_chainmail-knight', 'assets/friendly-people/chainmail-knight.png');
+		game.load.image('p_horse-knight', 'assets/friendly-people/horse-knight.png');
+		game.load.image('p_knight', 'assets/friendly-people/knight.png');
+		game.load.image('p_lady-peasant', 'assets/friendly-people/lady-peasant.png');
+		game.load.image('p_peasant', 'assets/friendly-people/peasant.png');
 
 		game.load.image('target', 'assets/target.png');
 		game.load.image('trans-grey', 'assets/trans-grey.png');
