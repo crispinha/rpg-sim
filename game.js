@@ -63,6 +63,15 @@ var isLocationOccupied = function (x, y) {
 	return false;
 };
 
+var isEnemyAtLocation = function (x, y) {
+	for (var i = 0; i < evil_people.length; i++) {
+		if (x == evil_people[i].gridX && y == evil_people[i].gridY) {
+			return true
+		}
+	}
+	return false;
+};
+
 var loadState = {
 	preload: function () {
 		game.time.advancedTiming = true;
@@ -83,6 +92,9 @@ var loadState = {
 		game.load.image('p_knight', 'assets/friendly-people/knight.png');
 		game.load.image('p_lady-peasant', 'assets/friendly-people/lady-peasant.png');
 		game.load.image('p_peasant', 'assets/friendly-people/peasant.png');
+
+		game.load.image('e_archer', 'assets/evil-people/archer.png');
+		game.load.image('e_chainmail-knight', 'assets/evil-people/chainmail-knight.png');
 
 		game.load.image('target', 'assets/target.png');
 		game.load.image('trans-grey', 'assets/trans-grey.png');
@@ -125,6 +137,8 @@ var playState = {
 		ui_elements = game.add.group();
 		friendly_sprites = find('p_', game.cache.getKeys(Phaser.Cache.IMAGE));
 		friendly_people = [];
+		evil_sprites = find('e_', game.cache.getKeys(Phaser.Cache.IMAGE));
+		evil_people = [];
 
 		target = game.add.sprite(0, 0, 'target');
 		sprites.add(target);
@@ -146,6 +160,19 @@ var playState = {
 			sprites.add(friendly_people[i]);
 			[friendly_people[i].x, friendly_people[i].y] = getRealCoords(friendly_people[i].gridX, friendly_people[i].gridY);
 			friendly_people[i].inputEnabled = true;
+		}
+
+		//making evil_people
+		for (var i = 0; i < 1; i++) {
+			evil_people[i] = game.add.sprite(0, 0, evil_sprites[Math.floor(Math.random() * evil_sprites.length)]);
+			evil_people[i].scale = {x: scale, y: scale};
+			do {
+				evil_people[i].gridX = getRandomIntInclusive(1, map.width);
+				evil_people[i].gridY = getRandomIntInclusive(1, map.height);
+			} while (!isLocationAccessable(evil_people[i].gridX, evil_people[i].gridY));
+			sprites.add(evil_people[i]);
+			[evil_people[i].x, evil_people[i].y] = getRealCoords(evil_people[i].gridX, evil_people[i].gridY);
+			evil_people[i].inputEnabled = true;
 		}
 
 		//control and debug setup
@@ -188,10 +215,12 @@ var playState = {
 		}
 
 		if (space.isDown){
-			console.log(target.on);
+			console.log(isEnemyAtLocation(target.gridX, target.gridY));
 		}
 
-		if (target.on && isLocationOccupied(pointer_grid_x, pointer_grid_y) || target.on && !isLocationAccessable(pointer_grid_x, pointer_grid_y)) {
+		if (target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
+			target.loadTexture('trans-red');
+		} else if (target.on && isLocationOccupied(pointer_grid_x, pointer_grid_y) || target.on && !isLocationAccessable(pointer_grid_x, pointer_grid_y)) {
 			target.loadTexture('trans-grey')
 		} else if (target.on) {
 			target.loadTexture('trans-blue');
