@@ -204,6 +204,14 @@ var playState = {
 				}, this);
 			}, {index: i})
 		}
+
+
+		for (var i = 0; i < vars.evil_people.length; i++) {
+			vars.evil_people[i].events.onInputDown.add(function () {
+				vars.target.on = false;
+			}, this)
+		}
+
 	},
 	update: function () {
 		vars.fps.setText(game.time.fps + " FPS");
