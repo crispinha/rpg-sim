@@ -191,6 +191,7 @@ var playState = {
 			vars.friendly_people[i].events.onInputDown.add(function () {
 				//index stuff is a horrible hack (probably) but it works
 				vars.target.on = true;
+				vars.target.user = vars.friendly_people[this.index];
 				game.input.onDown.addOnce(function () {
 					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
 					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
@@ -200,6 +201,7 @@ var playState = {
 						[vars.friendly_people[this.index].gridX, vars.friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
 						[vars.friendly_people[this.index].x, vars.friendly_people[this.index].y] = getRealCoords(vars.friendly_people[this.index].gridX, vars.friendly_people[this.index].gridY);
 						vars.target.on = false;
+						vars.target.user = null;
 					}
 				}, this);
 			}, {index: i})
@@ -208,7 +210,12 @@ var playState = {
 
 		for (var i = 0; i < vars.evil_people.length; i++) {
 			vars.evil_people[i].events.onInputDown.add(function () {
+				if (vars.target.on) {
+					vars.target.user.gridX = 1;
+					[vars.target.user.x, vars.target.user.y] = getRealCoords(vars.target.user.gridX, vars.target.user.gridY);
+				}
 				vars.target.on = false;
+				vars.target.user = null;
 			}, this)
 		}
 
@@ -224,7 +231,7 @@ var playState = {
 		}
 
 		if (vars.space.isDown){
-			console.log(isEnemyAtLocation(vars.target.gridX, vars.target.gridY));
+		
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
