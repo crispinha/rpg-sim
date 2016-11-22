@@ -157,7 +157,7 @@ var playState = {
 			do {
 				vars.friendly_people[i].gridX = getRandomIntInclusive(1, vars.map.width);
 				vars.friendly_people[i].gridY = getRandomIntInclusive(1, vars.map.height);
-			} while (!isLocationAccessable(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY));
+			} while (!isLocationAccessable(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY) && !isLocationOccupied(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY));
 			vars.sprites.add(vars.friendly_people[i]);
 			[vars.friendly_people[i].x, vars.friendly_people[i].y] = getRealCoords(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY);
 			vars.friendly_people[i].inputEnabled = true;
@@ -170,7 +170,7 @@ var playState = {
 			do {
 				vars.evil_people[i].gridX = getRandomIntInclusive(1, vars.map.width);
 				vars.evil_people[i].gridY = getRandomIntInclusive(1, vars.map.height);
-			} while (!isLocationAccessable(vars.evil_people[i].gridX, vars.evil_people[i].gridY));
+			} while (!isLocationAccessable(vars.evil_people[i].gridX, vars.evil_people[i].gridY) && !isLocationOccupied(vars.evil_people[i].gridX, vars.evil_people[i].gridY));
 			vars.sprites.add(vars.evil_people[i]);
 			[vars.evil_people[i].x, vars.evil_people[i].y] = getRealCoords(vars.evil_people[i].gridX, vars.evil_people[i].gridY);
 			vars.evil_people[i].inputEnabled = true;
@@ -231,7 +231,7 @@ var playState = {
 		}
 
 		if (vars.space.isDown){
-		
+			console.log(isLocationOccupied(vars.target.gridX, vars.target.gridY))
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
