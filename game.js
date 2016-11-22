@@ -72,6 +72,24 @@ var isEnemyAtLocation = function (x, y) {
 	return false;
 };
 
+var doAttack = function (attacker, defender) {
+	defender.stats.health = defender.stats.health - attacker.stats.attack;
+
+	attacker.stats.health = attacker.stats.health - (defender.stats.attack / 2);
+
+	if (defender.stats.health <= 0){
+		console.log('defender ded');
+		defender.kill();
+	}
+
+	if (attacker.stats.health <= 0){
+		console.log('attacker ded');
+		attacker.kill();
+	}
+
+	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
+};
+
 
 var vars = new Object();
 
@@ -161,6 +179,7 @@ var playState = {
 			vars.sprites.add(vars.friendly_people[i]);
 			[vars.friendly_people[i].x, vars.friendly_people[i].y] = getRealCoords(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY);
 			vars.friendly_people[i].inputEnabled = true;
+			vars.friendly_people[i].stats = {attack: 2, health: 5}
 		}
 
 		//making vars.evil_people
@@ -174,6 +193,7 @@ var playState = {
 			vars.sprites.add(vars.evil_people[i]);
 			[vars.evil_people[i].x, vars.evil_people[i].y] = getRealCoords(vars.evil_people[i].gridX, vars.evil_people[i].gridY);
 			vars.evil_people[i].inputEnabled = true;
+			vars.evil_people[i].stats = {attack: 2, health: 5}
 		}
 
 		//control and debug setup
@@ -211,12 +231,16 @@ var playState = {
 		for (var i = 0; i < vars.evil_people.length; i++) {
 			vars.evil_people[i].events.onInputDown.add(function () {
 				if (vars.target.on) {
-					vars.target.user.gridX = 1;
-					[vars.target.user.x, vars.target.user.y] = getRealCoords(vars.target.user.gridX, vars.target.user.gridY);
+					// vars.target.user.gridX = 1;
+					// [vars.target.user.x, vars.target.user.y] = getRealCoords(vars.target.user.gridX, vars.target.user.gridY);
+
+					//do attack
+					console.log(vars.evil_people[this.index]);
+					doAttack(vars.target.user, vars.evil_people[this.index]);
 				}
 				vars.target.on = false;
 				vars.target.user = null;
-			}, this)
+			}, {index: i})
 		}
 
 	},
@@ -241,7 +265,7 @@ var playState = {
 		} else if (vars.target.on) {
 			vars.target.loadTexture('trans-blue');
 		} else {
-			vars.target.loadTexture('target')
+			vars.target.loadTexture('target');
 		}
 
 	}
