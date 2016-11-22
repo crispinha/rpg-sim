@@ -78,12 +78,10 @@ var doAttack = function (attacker, defender) {
 	attacker.stats.health = attacker.stats.health - (defender.stats.attack / 2);
 
 	if (defender.stats.health <= 0){
-		console.log('defender ded');
 		defender.kill();
 	}
 
 	if (attacker.stats.health <= 0){
-		console.log('attacker ded');
 		attacker.kill();
 	}
 
@@ -231,11 +229,7 @@ var playState = {
 		for (var i = 0; i < vars.evil_people.length; i++) {
 			vars.evil_people[i].events.onInputDown.add(function () {
 				if (vars.target.on) {
-					// vars.target.user.gridX = 1;
-					// [vars.target.user.x, vars.target.user.y] = getRealCoords(vars.target.user.gridX, vars.target.user.gridY);
-
 					//do attack
-					console.log(vars.evil_people[this.index]);
 					doAttack(vars.target.user, vars.evil_people[this.index]);
 				}
 				vars.target.on = false;
