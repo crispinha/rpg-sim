@@ -20,9 +20,8 @@ function getRandomIntInclusive(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var scale = 7;
-var game = new Phaser.Game((scale + 1) * 100, (scale + 1) * 100, Phaser.AUTO, 'div');
-
+var scale = 1;
+var game = new Phaser.Game(scale * 100, scale * 100, Phaser.AUTO, 'div');
 
 //takes grid [x, y] returns game [x, y]
 var getRealCoords = function(x, y){
@@ -33,9 +32,8 @@ var getRealCoords = function(x, y){
 };
 
 //takes game [x,y] returns grid [x,y]
-//hopefully
 var getGridCoords = function (x, y) {
-	return [Math.round(vars.bg.getTileX(x) / scale), Math.round(vars.bg.getTileY(y) / scale)];
+	return [vars.bg.getTileX(x) / scale, vars.bg.getTileY(y) / scale];
 };
 
 var isLocationInRange = function (x, y){
@@ -97,11 +95,8 @@ var loadState = {
 		game.stage.smoothed = false;
 		game.antialias = false;
 		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		// //  This sets a limit on the up-scale
-		// game.scale.maxWidth = 800;
-		// game.scale.maxHeight = 800;
-		// game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		// game.scale.setGameSi();
+		Phaser.Canvas.setImageRenderingCrisp(game.canvas);
+		PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 		game.load.tilemap('arena', 'assets/battleground.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.image('tileset', 'assets/spritesheet.png');
 
@@ -181,7 +176,7 @@ var playState = {
 		}
 
 		//making vars.evil_people
-		for (var i = 0; i < 1; i++) {
+		for (var i = 0; i < 2; i++) {
 			vars.evil_people[i] = game.add.sprite(0, 0, vars.evil_sprites[Math.floor(Math.random() * vars.evil_sprites.length)]);
 			vars.evil_people[i].scale = {x: scale, y: scale};
 			do {
@@ -196,7 +191,7 @@ var playState = {
 
 		//control and debug setup
 		vars.fps = game.add.text(game.world.centerX + (game.world.width / 2.3), game.world.centerY - (game.world.height / 2.3), 00 + " FPS", {
-			font: "12px Arial"
+			font: "1px Arial", fill: "#FFFFFF"
 		});
 
 		game.world.bringToTop(vars.ui_elements);
@@ -241,15 +236,18 @@ var playState = {
 	update: function () {
 		vars.fps.setText(game.time.fps + " FPS");
 
+		var cursor_grid_x, cursor_grid_y;
+		var pointer_grid_x, pointer_grid_y;
 
-		[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+		[cursor_grid_x, cursor_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+		[pointer_grid_x, pointer_grid_y] = [cursor_grid_x + 1, cursor_grid_y + 1];
 		if (isLocationInRange(pointer_grid_x, pointer_grid_y)) {
-			[vars.target.gridX, vars.target.gridY] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+			[vars.target.gridX, vars.target.gridY] = [pointer_grid_x, pointer_grid_y];
 			[vars.target.x, vars.target.y] = getRealCoords(vars.target.gridX, vars.target.gridY);
 		}
 
 		if (vars.space.isDown){
-			console.log(isLocationOccupied(vars.target.gridX, vars.target.gridY))
+			console.log("x: " + vars.bg.getTileX(game.input.activePointer.x) + ", y: " + vars.bg.getTileY(game.input.activePointer.y));
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
