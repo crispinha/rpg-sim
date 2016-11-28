@@ -206,12 +206,12 @@ var playState = {
 				vars.target.on = true;
 				vars.target.user = vars.friendly_people[this.index];
 				game.input.onDown.addOnce(function () {
-					[pointer_x, pointer_y] = [game.input.activePointer.x, game.input.activePointer.y];
-					[pointer_grid_x, pointer_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+					[cursor_grid_x, cursor_grid_y] = getGridCoords(game.input.activePointer.x, game.input.activePointer.y);
+					[pointer_grid_x, pointer_grid_y] = [cursor_grid_x + 1, cursor_grid_y + 1];
 					//long line mofo
 					if (isLocationInRange(pointer_grid_x, pointer_grid_y) && isLocationAccessable(pointer_grid_x, pointer_grid_y)
 						&& !isLocationOccupied(pointer_grid_x, pointer_grid_y)) {
-						[vars.friendly_people[this.index].gridX, vars.friendly_people[this.index].gridY] = getGridCoords(pointer_x, pointer_y);
+						[vars.friendly_people[this.index].gridX, vars.friendly_people[this.index].gridY] = [pointer_grid_x, pointer_grid_y];
 						[vars.friendly_people[this.index].x, vars.friendly_people[this.index].y] = getRealCoords(vars.friendly_people[this.index].gridX, vars.friendly_people[this.index].gridY);
 						vars.target.on = false;
 						vars.target.user = null;
@@ -220,7 +220,7 @@ var playState = {
 			}, {index: i})
 		}
 
-
+		//attacking stuff
 		for (var i = 0; i < vars.evil_people.length; i++) {
 			vars.evil_people[i].events.onInputDown.add(function () {
 				if (vars.target.on) {
