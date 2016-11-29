@@ -71,9 +71,9 @@ var isEnemyAtLocation = function (x, y) {
 };
 
 var doAttack = function (attacker, defender) {
-	defender.stats.health = defender.stats.health - attacker.stats.attack;
+	defender.stats.health = defender.stats.health - attacker.stats.attack();
 
-	attacker.stats.health = attacker.stats.health - (defender.stats.attack / 2);
+	attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
 
 	if (defender.stats.health <= 0){
 		defender.kill();
@@ -172,7 +172,7 @@ var playState = {
 			vars.sprites.add(vars.friendly_people[i]);
 			[vars.friendly_people[i].x, vars.friendly_people[i].y] = getRealCoords(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY);
 			vars.friendly_people[i].inputEnabled = true;
-			vars.friendly_people[i].stats = {attack: 2, health: 5}
+			vars.friendly_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4};
 		}
 
 		//making vars.evil_people
@@ -186,7 +186,7 @@ var playState = {
 			vars.sprites.add(vars.evil_people[i]);
 			[vars.evil_people[i].x, vars.evil_people[i].y] = getRealCoords(vars.evil_people[i].gridX, vars.evil_people[i].gridY);
 			vars.evil_people[i].inputEnabled = true;
-			vars.evil_people[i].stats = {attack: 2, health: 5}
+			vars.evil_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4}
 		}
 
 		//control and debug setup
