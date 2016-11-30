@@ -34,7 +34,7 @@ node_modules
 
 .idea/*
 .DS_Store
-test/*
+tests/
 working/
 working/*
-.idea/
+.idea/p
