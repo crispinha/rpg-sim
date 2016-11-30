@@ -232,6 +232,20 @@ var playState = {
 			}, {index: i})
 		}
 
+		vars.getDistance = function (a, b) {
+			var sum = [a[0] - b[0], a[1] - b[1]];
+			console.log('sum ' + sum);
+			var abs_sum = [Math.abs(sum[0]), Math.abs(sum[1])];
+			console.log("abs_sum " + abs_sum);
+			return abs_sum;
+		};
+
+		vars.canAttackDistance = function (a, b, range) {
+			var initial = vars.getDistance(a, b)
+
+
+		}
+
 	},
 	update: function () {
 		vars.fps.setText(game.time.fps + " FPS");
@@ -247,7 +261,8 @@ var playState = {
 		}
 
 		if (vars.space.isDown){
-			console.log("x: " + vars.bg.getTileX(game.input.activePointer.x) + ", y: " + vars.bg.getTileY(game.input.activePointer.y));
+			vars.help([0,0], [pointer_grid_x, pointer_grid_y]);
+			// console.log(help([0,0], [pointer_grid_x, pointer_grid_y]));
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
