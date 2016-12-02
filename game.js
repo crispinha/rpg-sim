@@ -78,12 +78,9 @@ var getDistanceInTiles = function (a, b) {
 
 var areTilesInRange = function (a, b, range) {
 	var initial = getDistanceInTiles(a, b);
-	console.log(initial);
 	if ((initial[0] == 0 && initial[1] < range) || (initial[1] == 0 && initial[0] < range)) {
-		console.log(true);
 		return true;
 	} else {
-		console.log(false);
 		return false;
 	}
 };
