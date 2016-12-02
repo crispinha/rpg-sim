@@ -15,8 +15,8 @@ function find(key, array) {
 
 //thanks mozilla
 function getRandomIntInclusive(min, max) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
+	var min = Math.ceil(min);
+	var max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -70,22 +70,36 @@ var isEnemyAtLocation = function (x, y) {
 	return false;
 };
 
-var doAttack = function (attacker, defender) {
-	defender.stats.health = defender.stats.health - attacker.stats.attack();
-
-	attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
-
-	if (defender.stats.health <= 0){
-		defender.kill();
-	}
-
-	if (attacker.stats.health <= 0){
-		attacker.kill();
-	}
-
-	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
+var getDistanceInTiles = function (a, b) {
+	var sum = [a[0] - b[0], a[1] - b[1]];
+	var abs_sum = [Math.abs(sum[0]), Math.abs(sum[1])];
+	return abs_sum;
 };
 
+var areTilesInRange = function (a, b, range) {
+	var initial = getDistanceInTiles(a, b);
+	if ((initial[0] == 0 && initial[1] < range) || (initial[1] == 0 && initial[0] < range)) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+var doAttack = function (attacker, defender) {
+	if (areTilesInRange([attacker.gridX, attacker.gridY], [defender.gridX, defender.gridY], attacker.stats.range)) {
+		defender.stats.health = defender.stats.health - attacker.stats.attack();
+		attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
+		if (defender.stats.health <= 0){
+			defender.kill();
+		}
+		if (attacker.stats.health <= 0){
+			attacker.kill();
+		}
+		console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health);
+	} else {
+		console.log('not in range');
+	}
+};
 
 var vars = new Object();
 
@@ -247,7 +261,7 @@ var playState = {
 		}
 
 		if (vars.space.isDown){
-			console.log("x: " + vars.bg.getTileX(game.input.activePointer.x) + ", y: " + vars.bg.getTileY(game.input.activePointer.y));
+			areTilesInRange([1, 1], [pointer_grid_x, pointer_grid_y], 3);
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
