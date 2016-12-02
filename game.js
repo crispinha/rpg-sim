@@ -86,19 +86,19 @@ var areTilesInRange = function (a, b, range) {
 };
 
 var doAttack = function (attacker, defender) {
-	defender.stats.health = defender.stats.health - attacker.stats.attack();
-
-	attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
-
-	if (defender.stats.health <= 0){
-		defender.kill();
+	if (areTilesInRange([attacker.gridX, attacker.gridY], [defender.gridX, defender.gridY], attacker.stats.range)) {
+		defender.stats.health = defender.stats.health - attacker.stats.attack();
+		attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
+		if (defender.stats.health <= 0){
+			defender.kill();
+		}
+		if (attacker.stats.health <= 0){
+			attacker.kill();
+		}
+		console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health);
+	} else {
+		console.log('not in range');
 	}
-
-	if (attacker.stats.health <= 0){
-		attacker.kill();
-	}
-
-	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
 };
 
 var vars = new Object();
