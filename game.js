@@ -86,6 +86,23 @@ var doAttack = function (attacker, defender) {
 	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
 };
 
+var getDistanceInTiles = function (a, b) {
+	var sum = [a[0] - b[0], a[1] - b[1]];
+	var abs_sum = [Math.abs(sum[0]), Math.abs(sum[1])];
+	return abs_sum;
+};
+
+var areTilesInRange = function (a, b, range) {
+	var initial = getDistanceInTiles(a, b);
+	console.log(initial);
+	if ((initial[0] == 0 && initial[1] < range) || (initial[1] == 0 && initial[0] < range)) {
+		console.log(true);
+		return true;
+	} else {
+		console.log(false);
+		return false;
+	}
+}
 
 var vars = new Object();
 
@@ -232,24 +249,6 @@ var playState = {
 			}, {index: i})
 		}
 
-		vars.getDistance = function (a, b) {
-			var sum = [a[0] - b[0], a[1] - b[1]];
-			var abs_sum = [Math.abs(sum[0]), Math.abs(sum[1])];
-			return abs_sum;
-		};
-
-		vars.canAttackDistance = function (a, b, range) {
-			var initial = vars.getDistance(a, b);
-			console.log(initial);
-			if ((initial[0] == 0 && initial[1] < range) || (initial[1] == 0 && initial[0] < range)) {
-				console.log(true);
-				return true;
-			} else {
-				console.log(false);
-				return false;
-			}
-		}
-
 	},
 	update: function () {
 		vars.fps.setText(game.time.fps + " FPS");
@@ -265,7 +264,7 @@ var playState = {
 		}
 
 		if (vars.space.isDown){
-			vars.canAttackDistance([1, 1], [pointer_grid_x, pointer_grid_y], 3);
+			areTilesInRange([1, 1], [pointer_grid_x, pointer_grid_y], 3);
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
