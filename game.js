@@ -241,7 +241,6 @@ var playState = {
 		vars.canAttackDistance = function (a, b, range) {
 			var initial = vars.getDistance(a, b);
 			console.log(initial);
-			// if ((initial[0] == 0 && initial[0] < range) || (initial[1] == 0 && initial[1] < range)) {
 			if ((initial[0] == 0 && initial[1] < range) || (initial[1] == 0 && initial[0] < range)) {
 				console.log(true);
 				return true;
@@ -267,7 +266,6 @@ var playState = {
 
 		if (vars.space.isDown){
 			vars.canAttackDistance([1, 1], [pointer_grid_x, pointer_grid_y], 3);
-			// console.log(help([0,0], [pointer_grid_x, pointer_grid_y]));
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
