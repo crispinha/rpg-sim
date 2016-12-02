@@ -70,22 +70,6 @@ var isEnemyAtLocation = function (x, y) {
 	return false;
 };
 
-var doAttack = function (attacker, defender) {
-	defender.stats.health = defender.stats.health - attacker.stats.attack();
-
-	attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
-
-	if (defender.stats.health <= 0){
-		defender.kill();
-	}
-
-	if (attacker.stats.health <= 0){
-		attacker.kill();
-	}
-
-	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
-};
-
 var getDistanceInTiles = function (a, b) {
 	var sum = [a[0] - b[0], a[1] - b[1]];
 	var abs_sum = [Math.abs(sum[0]), Math.abs(sum[1])];
@@ -102,7 +86,23 @@ var areTilesInRange = function (a, b, range) {
 		console.log(false);
 		return false;
 	}
-}
+};
+
+var doAttack = function (attacker, defender) {
+	defender.stats.health = defender.stats.health - attacker.stats.attack();
+
+	attacker.stats.health = attacker.stats.health - Math.floor(defender.stats.attack() / 2);
+
+	if (defender.stats.health <= 0){
+		defender.kill();
+	}
+
+	if (attacker.stats.health <= 0){
+		attacker.kill();
+	}
+
+	console.log('defender: ' + defender.stats.health + '\nattacker: ' + attacker.stats.health)
+};
 
 var vars = new Object();
 
