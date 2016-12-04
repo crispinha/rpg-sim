@@ -212,6 +212,7 @@ var playState = {
 
 		vars.cursors = game.input.keyboard.createCursorKeys();
 		vars.space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+		vars.g = vars.space = game.input.keyboard.addKey(Phaser.KeyCode.G);
 
 		//movement stuff
 		for (var i = 0; i < vars.friendly_people.length; i++) {
@@ -262,6 +263,10 @@ var playState = {
 
 		if (vars.space.isDown){
 			areTilesInRange([1, 1], [pointer_grid_x, pointer_grid_y], 3);
+		}
+
+		if (vars.g.isDown){
+			game.state.start('play');
 		}
 
 		if (vars.target.on && isEnemyAtLocation(pointer_grid_x, pointer_grid_y)) {
