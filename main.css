@@ -6,4 +6,5 @@ body {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
     -ms-interpolation-mode: nearest-neighbor;
+    margin: 0px;
 }
