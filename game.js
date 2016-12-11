@@ -201,25 +201,26 @@ var playState = {
 			switch (sprite) {
 				case "p_archer": vars.friendly_people[i].stats =
 					{type: 'archer', attack: (function(){var x = getRandomIntInclusive(2, 4);return x;}), max_health: 5,
-						range: 5, speed: 2}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+						range: 5, speed: 2, team: 'blue'}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				case "p_chainmail-knight": vars.friendly_people[i].stats =
 					{type: 'chainmail knight', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 6,
-						range: 2, speed: 4}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+						range: 2, speed: 4, team: 'blue'}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				case "p_horse-knight": vars.friendly_people[i].stats =
 					{type: 'horse knight', attack: (function(){var x = getRandomIntInclusive(1, 2);return x;}), max_health: 4,
-						range: 2, speed: 5}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+						range: 2, speed: 5, team: 'blue'}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				case "p_knight": vars.friendly_people[i].stats =
 					{type: 'knight', attack: (function(){var x = getRandomIntInclusive(1, 5);return x;}), max_health: 6,
-						range: 2, speed: 3}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+						range: 2, speed: 3, team: 'blue'}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				default: vars.friendly_people[i].stats =
 					{type: 'default', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 5,
-						range: 3, speed: 4}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+						range: 3, speed: 4, team: 'blue'}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 			}
 		}
 
 		//making vars.evil_people
 		for (var i = 0; i < 2; i++) {
-			vars.evil_people[i] = game.add.sprite(0, 0, vars.evil_sprites[Math.floor(Math.random() * vars.evil_sprites.length)]);
+			var sprite = vars.evil_sprites[Math.floor(Math.random() * vars.evil_sprites.length)];
+			vars.evil_people[i] = game.add.sprite(0, 0, sprite);
 			vars.evil_people[i].scale = {x: scale, y: scale};
 			do {
 				vars.evil_people[i].gridX = getRandomIntInclusive(1, vars.map.width);
@@ -228,7 +229,17 @@ var playState = {
 			vars.sprites.add(vars.evil_people[i]);
 			[vars.evil_people[i].x, vars.evil_people[i].y] = getRealCoords(vars.evil_people[i].gridX, vars.evil_people[i].gridY);
 			vars.evil_people[i].inputEnabled = true;
-			vars.evil_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4}
+			switch (sprite) {
+				case "e_archer": vars.evil_people[i].stats =
+					{type: 'archer', attack: (function(){var x = getRandomIntInclusive(2, 4);return x;}), max_health: 5,
+						range: 5, speed: 2, team: 'red'}; vars.friendly_people[i].stats.health = vars.evil_people[i].stats.max_health; break;
+				case "e_chainmail-knight": vars.evil_people[i].stats =
+					{type: 'chainmail knight', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 6,
+						range: 2, speed: 4, team: 'red'}; vars.evil_people[i].stats.health = vars.evil_people[i].stats.max_health; break;
+				default: vars.evil_people[i].stats =
+					{type: 'default', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 5,
+						range: 3, speed: 4, team: 'red'}; vars.evil_people[i].stats.health = vars.evil_people[i].stats.max_health; break;
+			}
 		}
 
 		//movement stuff
