@@ -198,14 +198,22 @@ var playState = {
 			vars.sprites.add(vars.friendly_people[i]);
 			[vars.friendly_people[i].x, vars.friendly_people[i].y] = getRealCoords(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY);
 			vars.friendly_people[i].inputEnabled = true;
-			console.log(sprite);
-			vars.friendly_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4};
 			switch (sprite) {
-				case "p_archer": console.log('archer'); break;
-				case "p_chainmail-knight": console.log('chainmail knight'); break;
-				case "p_horse-knight": console.log('horse knight'); break;
-				case "p_knight": console.log('knight'); break;
-				default: console.log("something's wrong"); break;
+				case "p_archer": vars.friendly_people[i].stats =
+					{type: 'archer', attack: (function(){var x = getRandomIntInclusive(2, 4);return x;}), max_health: 5,
+						range: 5, speed: 2}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+				case "p_chainmail-knight": vars.friendly_people[i].stats =
+					{type: 'chainmail knight', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 6,
+						range: 2, speed: 4}; break;
+				case "p_horse-knight": vars.friendly_people[i].stats =
+					{type: 'horse knight', attack: (function(){var x = getRandomIntInclusive(1, 2);return x;}), max_health: 4,
+						range: 2, speed: 5}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+				case "p_knight": vars.friendly_people[i].stats =
+					{type: 'knight', attack: (function(){var x = getRandomIntInclusive(1, 5);return x;}), max_health: 6,
+						range: 2, speed: 3}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
+				default: vars.friendly_people[i].stats =
+					{type: 'default', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 5,
+						range: 3, speed: 4}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 			}
 		}
 
