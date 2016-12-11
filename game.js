@@ -118,8 +118,8 @@ var loadState = {
 		game.load.image('p_chainmail-knight', 'assets/friendly-people/chainmail-knight.png');
 		game.load.image('p_horse-knight', 'assets/friendly-people/horse-knight.png');
 		game.load.image('p_knight', 'assets/friendly-people/knight.png');
-		game.load.image('p_lady-peasant', 'assets/friendly-people/lady-peasant.png');
-		game.load.image('p_peasant', 'assets/friendly-people/peasant.png');
+		game.load.image('n_lady-peasant', 'assets/friendly-people/lady-peasant.png');
+		game.load.image('n_peasant', 'assets/friendly-people/peasant.png');
 
 		game.load.image('e_archer', 'assets/evil-people/archer.png');
 		game.load.image('e_chainmail-knight', 'assets/evil-people/chainmail-knight.png');
@@ -188,7 +188,8 @@ var playState = {
 
 		//making vars.friendly_people
 		for (var i = 0; i < 2; i++) {
-			vars.friendly_people[i] = game.add.sprite(0, 0, vars.friendly_sprites[Math.floor(Math.random() * vars.friendly_sprites.length)]);
+			var sprite = vars.friendly_sprites[Math.floor(Math.random() * vars.friendly_sprites.length)];
+			vars.friendly_people[i] = game.add.sprite(0, 0, sprite);
 			vars.friendly_people[i].scale = {x: scale, y: scale};
 			do {
 				vars.friendly_people[i].gridX = getRandomIntInclusive(1, vars.map.width);
@@ -197,7 +198,15 @@ var playState = {
 			vars.sprites.add(vars.friendly_people[i]);
 			[vars.friendly_people[i].x, vars.friendly_people[i].y] = getRealCoords(vars.friendly_people[i].gridX, vars.friendly_people[i].gridY);
 			vars.friendly_people[i].inputEnabled = true;
+			console.log(sprite);
 			vars.friendly_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4};
+			switch (sprite) {
+				case "p_archer": console.log('archer'); break;
+				case "p_chainmail-knight": console.log('chainmail knight'); break;
+				case "p_horse-knight": console.log('horse knight'); break;
+				case "p_knight": console.log('knight'); break;
+				default: console.log("something's wrong"); break;
+			}
 		}
 
 		//making vars.evil_people
@@ -270,6 +279,7 @@ var playState = {
 		}
 
 		if (vars.g.isDown){
+			console.clear()
 			game.state.start('play');
 		}
 
