@@ -204,7 +204,7 @@ var playState = {
 						range: 5, speed: 2}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				case "p_chainmail-knight": vars.friendly_people[i].stats =
 					{type: 'chainmail knight', attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), max_health: 6,
-						range: 2, speed: 4}; break;
+						range: 2, speed: 4}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
 				case "p_horse-knight": vars.friendly_people[i].stats =
 					{type: 'horse knight', attack: (function(){var x = getRandomIntInclusive(1, 2);return x;}), max_health: 4,
 						range: 2, speed: 5}; vars.friendly_people[i].stats.health = vars.friendly_people[i].stats.max_health; break;
