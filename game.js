@@ -175,6 +175,17 @@ var playState = {
 		[vars.target.x, vars.target.y] = getRealCoords(vars.target.gridX, vars.target.gridY);
 		vars.target.on = false;
 
+		//control and debug setup
+		vars.fps = game.add.text(game.world.centerX + (game.world.width / 2.3), game.world.centerY - (game.world.height / 2.3), 00 + " FPS", {
+			font: "1px Arial", fill: "#FFFFFF"
+		});
+
+		game.world.bringToTop(vars.ui_elements);
+
+		vars.cursors = game.input.keyboard.createCursorKeys();
+		vars.space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+		vars.g = game.input.keyboard.addKey(Phaser.KeyCode.G);
+
 		//making vars.friendly_people
 		for (var i = 0; i < 2; i++) {
 			vars.friendly_people[i] = game.add.sprite(0, 0, vars.friendly_sprites[Math.floor(Math.random() * vars.friendly_sprites.length)]);
@@ -202,17 +213,6 @@ var playState = {
 			vars.evil_people[i].inputEnabled = true;
 			vars.evil_people[i].stats = {attack: (function(){var x = getRandomIntInclusive(1, 3);return x;}), health: 5, range: 3, speed: 4}
 		}
-
-		//control and debug setup
-		vars.fps = game.add.text(game.world.centerX + (game.world.width / 2.3), game.world.centerY - (game.world.height / 2.3), 00 + " FPS", {
-			font: "1px Arial", fill: "#FFFFFF"
-		});
-
-		game.world.bringToTop(vars.ui_elements);
-
-		vars.cursors = game.input.keyboard.createCursorKeys();
-		vars.space = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-		vars.g = vars.space = game.input.keyboard.addKey(Phaser.KeyCode.G);
 
 		//movement stuff
 		for (var i = 0; i < vars.friendly_people.length; i++) {
@@ -261,8 +261,12 @@ var playState = {
 			[vars.target.x, vars.target.y] = getRealCoords(vars.target.gridX, vars.target.gridY);
 		}
 
-		if (vars.space.isDown){
-			areTilesInRange([1, 1], [pointer_grid_x, pointer_grid_y], 3);
+		if (vars.space.isDown) {
+			console.log('hey');
+			for (var i = 0; i < vars.sprites.children.length; i++) {
+				console.log(vars.sprites.children[i].stats);
+			};
+			vars.space.reset();
 		}
 
 		if (vars.g.isDown){
